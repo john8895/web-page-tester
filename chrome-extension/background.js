@@ -1,22 +1,3 @@
-// window.onload = function() {
-//
-//     const Btn = document.getElementById('clickBtn');
-//     Btn.addEventListener('click',function() {
-//
-//         alert('Hello');
-//     })
-// }
-// Called when the user clicks on the browser action.
-// chrome.browserAction.onClicked.addListener(function(tab) {
-//   // No tabs or host permissions needed!
-//   console.log('Turning ' + tab.url + ' red!');
-//   chrome.scripting.executeScript({
-//     code: 'document.body.style.backgroundColor="red"'
-//   });
-// });
-// function reddenPage() {
-//     document.body.style.backgroundColor = 'blue';
-// }
 function allFunctions() {
     checkLinkTitle()
     checkImageAlt()
@@ -39,7 +20,6 @@ function allFunctions() {
                 prompt.style.cssText = promptStyleText;
                 prompt.innerHTML = 'title';
                 item.appendChild(prompt);
-                // console.log(index + 1, item)
             })
         }
     }
@@ -61,7 +41,6 @@ function allFunctions() {
                 prompt.style.cssText = promptStyleText;
                 prompt.innerHTML = 'alt';
                 item.appendChild(prompt);
-                // console.log(index + 1, item)
             })
         }
 
