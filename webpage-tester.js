@@ -1,20 +1,26 @@
 /**
  * name: 初稿完稿 頁面自動檢查工具
- * Version: 1.2
- * Date: 2021.03.08
+ * Version: 1.3
+ * Date: 2021.03.31
  */
 
 (function () {
     "use strict";
 
-    const promptStyleText = 'position:absolute;bottom:-20px;left:0;color:red;font-size:15px;font-weight:normal;'
+    class CheckElement {
+        promptStyleText;
 
-    checkLinkTitle();
-    checkImageAlt();
-    checkElement();
-    // checkFilePath();
+        constructor() {
+            this.promptStyleText = 'position:absolute;bottom:-20px;left:0;color:red;font-size:15px;font-weight:normal;'
 
-    function checkLinkTitle() {
+            this.checkWebeditor();
+            this.checkImageAlt();
+            this.checkLinkTitle();
+            this.checkFavicon();
+            this.checkImagePath();
+        }
+
+        checkLinkTitle() {
         const aTags = document.getElementsByTagName('a');
         const aArray = [...aTags]
 
@@ -27,56 +33,69 @@
             aFilter.forEach((item, index) => {
                 item.style.cssText = 'backgroundColor:red;outline:2px solid red;position:relative;';
                 const prompt = document.createElement('span');
-                prompt.style.cssText = promptStyleText;
+                prompt.style.cssText = this.promptStyleText;
                 prompt.innerHTML = 'title';
                 item.appendChild(prompt);
-                // console.log(index + 1, item)
             })
         }
-
-
     }
 
+        checkImageAlt() {
+            const imgTags = document.getElementsByTagName('img');
+            const imgArray = [...imgTags]
 
-    function checkImageAlt() {
-        const imgTags = document.getElementsByTagName('img');
-        const imgArray = [...imgTags]
+            let imgFilter = imgArray.filter((item) => {
+                return !item.hasAttribute('alt')
+            })
+            if (imgFilter) {
+                console.log('img alt total:', imgFilter.length)
 
-        let imgFilter = imgArray.filter((item) => {
-            return !item.hasAttribute('alt')
-        })
-        if (imgFilter) {
-            console.log('img alt total:', imgFilter.length)
+                imgFilter.forEach((item, index) => {
+                    item.style.cssText = 'backgroundColor:red;outline:2px solid blue;position:relative;';
+                    const prompt = document.createElement('span');
+                    prompt.style.cssText = this.promptStyleText;
+                    prompt.innerHTML = 'alt';
+                    item.appendChild(prompt);
+                })
+            }
+        }
 
-            imgFilter.forEach((item, index) => {
-                item.style.cssText = 'backgroundColor:red;outline:2px solid blue;position:relative;';
+        checkWebeditor() {
+            const editors = document.getElementsByClassName('webeditor');
+            const editorsEl = [...editors]
+
+            editorsEl.forEach((item) => {
+                item.style.cssText = 'backgroundColor:red;outline:2px solid deeppink;position:relative;';
                 const prompt = document.createElement('span');
-                prompt.style.cssText = promptStyleText;
-                prompt.innerHTML = 'alt';
+                prompt.style.cssText = this.promptStyleText + 'color:blue;';
+                prompt.innerHTML = 'webeditor';
                 item.appendChild(prompt);
-                // console.log(index + 1, item)
+            })
+        };
+
+        checkFavicon() {
+            const allLinks = document.querySelectorAll('link');
+            let linkEmpty = 0;
+            for (let i = 0; i < allLinks.length; i++) {
+                if (allLinks[i].rel.indexOf('icon') > -1) {
+                    console.log(allLinks[i].href)
+                } else {
+                    linkEmpty++
+                }
+                if (linkEmpty === allLinks.length) {
+                    console.log('favicon empty')
+                }
+            }
+        }
+
+        checkImagePath() {
+            const imgs = document.querySelectorAll('img')
+            imgs.forEach((img) => {
+                console.log(img.src);
             })
         }
 
     }
 
-
-    function checkElement() {
-        const editors = document.getElementsByClassName('webeditor');
-        const editorsEl = [...editors]
-
-        editorsEl.forEach((item) => {
-            item.style.cssText = 'backgroundColor:red;outline:2px solid deeppink;position:relative;';
-            const prompt = document.createElement('span');
-            prompt.style.cssText = promptStyleText + 'color:blue;';
-            prompt.innerHTML = 'webeditor';
-            item.appendChild(prompt);
-        })
-    };
-
-
-    // function checkFilePath() {
-    //     const imgs = document.querySelectorAll('img')
-    //     console.log(imgs)
-    // }
-})();
+    const check = new CheckElement();
+})()
